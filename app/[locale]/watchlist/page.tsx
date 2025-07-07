@@ -7,7 +7,7 @@ import { fetchWatchlist } from '@/lib/FetchWatchlist';
 import { Movie, Series } from '@/types/title';
 import Image from 'next/image';
 import Link from 'next/link';
-import { MdDelete } from 'react-icons/md'; // استيراد أيقونة الحذف
+import { MdDelete } from 'react-icons/md';
 
 interface WatchlistItem {
   titleId: string;
@@ -25,10 +25,13 @@ const Page = () => {
   }; 
 
   const movieURLFormat = (item: Movie | Series) => `/${locale}/browse/movies/title/${item.id}`;
-  const [title, setTitle] = useState([] as (Movie | Series)[]);
-  const [watchlist, setWatchlist] = useState([] as WatchlistItem[]);
+
+  const [title, setTitle] = useState<(Movie | Series)[]>([]);
+  const [watchlist, setWatchlist] = useState<WatchlistItem[]>([]);
   const [loading, setLoading] = useState(true);
   const { userId } = useAuth();
+
+  // hoveredItem نوعه string أو null
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   useEffect(() => {
@@ -68,11 +71,11 @@ const Page = () => {
     };
 
     fetchMovies();
-  }, [watchlist]);
+  }, [watchlist, locale]); // أضفت locale كاعتماد
 
   const handleRemoveFromWatchlist = (titleId: string) => {
-    setWatchlist(prev => prev.filter(item => item.titleId !== titleId)); // إزالة من قائمة المراقبة
-    setTitle(prev => prev.filter(item => item.id !== titleId)); // إزالة من قائمة العناوين
+    setWatchlist(prev => prev.filter(item => item.titleId !== titleId)); 
+    setTitle(prev => prev.filter(item => String(item.id) !== titleId)); // حولت item.id إلى نص للمقارنة
   };
 
   const getButtonLabel = () => {
@@ -98,7 +101,7 @@ const Page = () => {
               <div 
                 key={item.id} 
                 className="movie-card" 
-                onMouseEnter={() => setHoveredItem(item.id)} 
+                onMouseEnter={() => setHoveredItem(String(item.id))} // حوّل الرقم إلى نص
                 onMouseLeave={() => setHoveredItem(null)}
               >
                 <Image 
@@ -109,13 +112,14 @@ const Page = () => {
                   className="pointer-events-none"
                 />
                 <div className="movie-card-overlay">
-                  {hoveredItem === item.id && (
+                  {/* المقارنة مع String(item.id) */}
+                  {hoveredItem === String(item.id) && (
                     <>
                       <button 
-                        onClick={() => handleRemoveFromWatchlist(item.id)} 
+                        onClick={() => handleRemoveFromWatchlist(String(item.id))} 
                         className="absolute top-2 right-2 bg-white/80 text-gray-800 p-1 rounded-full hover:bg-white hover:text-gray-900"
                       >
-                        <MdDelete /> {/* عرض أيقونة الحذف */}
+                        <MdDelete />
                       </button>
                       <Link href={movieURLFormat(item)}>
                         <button className="watch-button">
