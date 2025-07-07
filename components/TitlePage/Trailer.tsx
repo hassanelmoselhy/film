@@ -14,25 +14,26 @@ const Trailer = ({ titleName, string, status }: TrailerProps) => {
   const [showsTrailer, setShowsTrailer] = useState(status);
   const [trailer, setTrailer] = useState({} as YoutubeVideo);
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&key=${process.env.NEXT_PUBLIC_YOUTUBE_API_KEY}&type=video&q=${titleName}+trailer&maxResults=1`;
 
   useEffect(() => {
-    if (!titleName) {
-      console.error('Title name is undefined.');
-      return;
-    }
+  if (!titleName) {
+    console.error('Title name is undefined.');
+    return;
+  }
+  
+  const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&key=${process.env.NEXT_PUBLIC_YOUTUBE_API_KEY}&type=video&q=${titleName}+trailer&maxResults=1`;
 
-    fetch(url)
-      .then(response => response.json())
-      .then(data => {
-        if (data.items && data.items.length > 0) {
-          setTrailer(data.items[0]);
-        } else {
-          console.error('No video found for the given title.');
-        }
-      })
-      .catch(error => console.error('Error fetching YouTube API:', error));
-  }, [titleName]);
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      if (data.items && data.items.length > 0) {
+        setTrailer(data.items[0]);
+      } else {
+        console.error('No video found for the given title.');
+      }
+    })
+    .catch(error => console.error('Error fetching YouTube API:', error));
+}, [titleName]);
 
   useEffect(() => {
     if (showsTrailer) {
@@ -98,11 +99,12 @@ const Trailer = ({ titleName, string, status }: TrailerProps) => {
           <p className="text-white">No trailer available</p>
         )}
       </div>
-      <ReadyTooltip children={
-        <Button size='lgIcon' onClick={() => (setShowsTrailer(!showsTrailer))}>
-          <PiFilmSlateDuotone />
-        </Button>}
-        title={string} />
+  <ReadyTooltip title={string}>
+  <Button size='lgIcon' onClick={() => setShowsTrailer(!showsTrailer)}>
+    <PiFilmSlateDuotone />
+  </Button>
+</ReadyTooltip>
+
     </>
   );
 };

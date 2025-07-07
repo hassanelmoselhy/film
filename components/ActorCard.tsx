@@ -14,7 +14,7 @@ interface ActorCardProps {
   }[];
 }
 
-const ActorCard = ({ actorName, credit_id, profile_path, character, gender, roles }: ActorCardProps) => {
+const ActorCard = ({ actorName, credit_id, profile_path, character, gender }: ActorCardProps) => {
   const placeholderIndex = useMemo(() => {
     return Math.floor(Math.random() * 50) + 1;
   }, []);

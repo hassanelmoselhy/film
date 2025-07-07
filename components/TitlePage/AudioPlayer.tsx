@@ -48,15 +48,12 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ songName, tooltipTitle }) => 
         src={`http://84.235.244.198:6868/convert?name=${encodeURIComponent(songName)}`}
         onEnded={() => setIsPlaying(false)}
       />
-      <ReadyTooltip children={
-        <Button size='lgIcon' onClick={handlePlayPause}>
-          {
-            !isPlaying
-              ? <SlVolume2 />
-              : <SlVolumeOff />
-          }
-        </Button>
-      } title={tooltipTitle} />
+   <ReadyTooltip title={tooltipTitle}>
+  <Button size='lgIcon' onClick={handlePlayPause}>
+    {!isPlaying ? <SlVolume2 /> : <SlVolumeOff />}
+  </Button>
+</ReadyTooltip>
+
     </div>
   );
 };

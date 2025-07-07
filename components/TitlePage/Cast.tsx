@@ -21,20 +21,25 @@ export const Cast = ({ series, cast, t, sliderSettings }: CastProps) => {
   return (
     <OpenTitleInfoCard className='mb-8' title={series.genres && series.genres.some(genre => genre.id === 16) ? t('voiceActors') : t('cast')}>
       <div className='overflow-x-clip h-[8rem]'>
-        <HorizontalCarousel
-          navStyle='style1'
-          data={cast}
-          settings={sliderSettings.cast}
-          ItemComponent={({ item }) => (
-            <ActorCard
-              actorName={item.name}
-              credit_id={item.credit_id}
-              profile_path={item.profile_path}
-              character={item.character}
-              gender={item.gender}
-            />
-          )}
-        />
+      <HorizontalCarousel
+  navStyle='style1'
+  data={cast}
+  settings={sliderSettings.cast}
+  ItemComponent={({ item }) => {
+    const castItem = item as typeof cast[number]; // نخبر تايب سكريبت أن نوع العنصر هو عنصر من المصفوفة `cast`
+
+    return (
+      <ActorCard
+        actorName={castItem.name}
+        credit_id={castItem.credit_id}
+        profile_path={castItem.profile_path}
+
+        gender={castItem.gender}
+      />
+    );
+  }}
+/>
+
       </div>
     </OpenTitleInfoCard>
   );

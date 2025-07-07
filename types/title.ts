@@ -207,3 +207,4 @@ export interface SliderSettings {
   };
   defaultImagesPerPage: number;
 }
+export type Cast = SeriesCast | MovieCast;

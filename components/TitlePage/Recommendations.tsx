@@ -38,13 +38,15 @@ const settings = {
 
 const Recommendations: React.FC<RecommendationsProps> = ({ titleType, titleID, header }) => {
   const [recommendations, setRecommendations] = useState([] as Title[]);
-  const url = `https://api.themoviedb.org/3/${titleType === 'movie' ? "movie" : "tv"}/${titleID}/recommendations?language=en-US&page=1`
-  useEffect(() => {
-    fetch(url, options)
-      .then(response => response.json())
-      .then(json => (setRecommendations(json.results)))
-      .catch(error => console.error('Error fetching recommendations:', error));
-  }, [titleID]);
+ useEffect(() => {
+  const url = `https://api.themoviedb.org/3/${titleType === 'movie' ? "movie" : "tv"}/${titleID}/recommendations?language=en-US&page=1`;
+
+  fetch(url, options)
+    .then(response => response.json())
+    .then(json => setRecommendations(json.results))
+    .catch(error => console.error('Error fetching recommendations:', error));
+}, [titleType, titleID]);
+
 
   return (
     <div>
